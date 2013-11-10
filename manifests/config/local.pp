@@ -17,12 +17,14 @@
 #         not exactly ideal.
 define git::config::local($key, $value, $ensure = present) {
   $split_key = split($key, '\.')
+  $section = join(delete_at($split_key, size($split_key) - 1), '.')
+  $setting = $split_key[-1]
 
   ini_setting { "set ${key} to ${value} in ${name}":
     ensure  => $ensure,
     path    => "${name}/.git/config",
-    section => $split_key[0],
-    setting => $split_key[1],
+    section => $section,
+    setting => $setting,
     value   => $value
   }
 }

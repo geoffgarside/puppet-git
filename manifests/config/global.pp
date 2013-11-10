@@ -14,13 +14,15 @@
 #   }
 define git::config::global($value) {
   $split_key = split($name, '\.')
+  $section = join(delete_at($split_key, size($split_key) - 1), '.')
+  $setting = $split_key[-1]
   $path = "/Users/${::boxen_user}/.gitconfig"
 
   ini_setting { "set ${name} to ${value} in ${path}":
     ensure  => present,
     path    => $path,
-    section => $split_key[0],
-    setting => $split_key[1],
+    section => $section,
+    setting => $setting,
     value   => $value,
   }
 }
